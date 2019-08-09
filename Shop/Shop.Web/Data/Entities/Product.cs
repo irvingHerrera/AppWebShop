@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shop.Web.Data.Contract;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Shop.Web.Data.Entities

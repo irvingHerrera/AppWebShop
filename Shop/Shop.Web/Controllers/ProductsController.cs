@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shop.Web.Data;
+using Shop.Web.Data.Contract;
 using Shop.Web.Data.Entities;
 using Shop.Web.Helper;
 using System.Threading.Tasks;
@@ -9,30 +10,30 @@ namespace Shop.Web.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly IReporsitory reporsitory;
+        private readonly IProductRepository productRepository;
         private readonly IUserHelper userHelper;
 
-        public ProductsController(IReporsitory reporsitory, IUserHelper userHelper)
+        public ProductsController(IProductRepository productRepository, IUserHelper userHelper)
         {
-            this.reporsitory = reporsitory;
+            this.productRepository = productRepository;
             this.userHelper = userHelper;
         }
 
         // GET: Products
         public IActionResult Index()
         {
-            return View(reporsitory.GetProducts());
+            return View(productRepository.Getall());
         }
 
         // GET: Products/Details/5
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var product = reporsitory.GetProduct(id.Value);
+            var product = await productRepository.GetByIdAsync(id.Value);
 
             if (product == null)
             {
@@ -57,22 +58,21 @@ namespace Shop.Web.Controllers
             {
                 //TODO: change for the logged user 
                 product.User = await userHelper.GetUserByEmailAsync("irving.herreramolina@gmail.com");
-                reporsitory.AddProduct(product);
-                await reporsitory.SaveAllAsync();
+                await productRepository.CreateAsync(product);
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
         }
 
         // GET: Products/Edit/5
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var product = reporsitory.GetProduct(id.Value);
+            var product = await productRepository.GetByIdAsync(id.Value);
             if (product == null)
             {
                 return NotFound();
@@ -90,12 +90,12 @@ namespace Shop.Web.Controllers
             {
                 try
                 {
-                    reporsitory.UpdateProduct(product);
-                    await reporsitory.SaveAllAsync();
+                    product.User = await this.userHelper.GetUserByEmailAsync("irving.herreramolina@gmail.com");
+                    await productRepository.UpdateAsync(product);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!reporsitory.ProductExists(product.Id))
+                    if (! await productRepository.ExisAsync(product.Id))
                     {
                         return NotFound();
                     }
@@ -110,14 +110,14 @@ namespace Shop.Web.Controllers
         }
 
         // GET: Products/Delete/5
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var product = reporsitory.GetProduct(id.Value);
+            var product = await productRepository.GetByIdAsync(id.Value);
 
             if (product == null)
             {
@@ -132,8 +132,8 @@ namespace Shop.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = reporsitory.GetProduct(id);
-            await this.reporsitory.SaveAllAsync();
+            var product = await productRepository.GetByIdAsync(id);
+            await productRepository.DeteleAsync(product);
             return RedirectToAction(nameof(Index));
         }
     }

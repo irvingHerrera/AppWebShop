@@ -14,7 +14,7 @@ namespace Shop.Web.Data
             this.context = context;
         }
 
-        public IEnumerable<Product> GetProduct()
+        public IEnumerable<Product> GetProducts()
         {
             return this.context.Products.OrderBy(p => p);
         }
@@ -24,7 +24,7 @@ namespace Shop.Web.Data
             return this.context.Products.Find(id);
         }
 
-        public void AddProduc(Product product)
+        public void AddProduct(Product product)
         {
             this.context.Products.Add(product);
         }

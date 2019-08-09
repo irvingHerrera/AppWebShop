@@ -6,8 +6,8 @@ namespace Shop.Web.Data
 {
     public interface IReporsitory
     {
-        void AddProduc(Product product);
-        IEnumerable<Product> GetProduct();
+        void AddProduct(Product product);
+        IEnumerable<Product> GetProducts();
         Product GetProduct(int id);
         bool ProductExists(int id);
         void RemoveProduct(Product product);

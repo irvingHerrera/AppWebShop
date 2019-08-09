@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shop.Web.Data;
 using Shop.Web.Data.Entities;
+using Shop.Web.Helper;
 
 namespace Shop.Web
 {
@@ -48,6 +49,7 @@ namespace Shop.Web
             services.AddTransient<SeedDB>();
 
             services.AddScoped<IReporsitory, Reporsitory>();
+            services.AddScoped<IUserHelper, UserHelper>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

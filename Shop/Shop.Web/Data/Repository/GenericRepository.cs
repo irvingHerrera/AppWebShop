@@ -45,7 +45,7 @@ namespace Shop.Web.Data.Repository
 
         public async Task<bool> UpdateAsync(T entity)
         {
-            this.context.Set<T>().Remove(entity);
+            this.context.Set<T>().Update(entity);
             return await this.context.SaveChangesAsync() > 0;
         }
     }

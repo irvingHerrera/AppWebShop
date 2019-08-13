@@ -4,6 +4,9 @@ using Shop.Web.Data;
 using Shop.Web.Data.Contract;
 using Shop.Web.Data.Entities;
 using Shop.Web.Helper;
+using Shop.Web.Models;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Shop.Web.Controllers
@@ -52,16 +55,52 @@ namespace Shop.Web.Controllers
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Product product)
+        public async Task<IActionResult> Create(ProductViewModel view)
         {
             if (ModelState.IsValid)
             {
+
+                var path = string.Empty;
+
+                if (view.ImageFile != null && view.ImageFile.Length > 0)
+                {
+                    path = Path.Combine(
+                        Directory.GetCurrentDirectory(), 
+                        "wwwroot\\imagenes\\Products", 
+                        view.ImageFile.FileName);
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await view.ImageFile.CopyToAsync(stream);
+                    }
+                    path = $"~/imagenes/Products/{view.ImageFile.FileName}";
+                }
+
+                var product = this.ToProduct(view, path);
+
+
                 //TODO: change for the logged user 
                 product.User = await userHelper.GetUserByEmailAsync("irving.herreramolina@gmail.com");
                 await productRepository.CreateAsync(product);
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(view);
+        }
+
+        private Product ToProduct(ProductViewModel view, string path)
+        {
+            return new Product
+            {
+                ImageUrl = path,
+                Id = view.Id,
+                IsAvailabe = view.IsAvailabe,
+                LastPurchase = view.LastPurchase,
+                LastSale = view.LastSale,
+                Name = view.Name,
+                Price = view.Price,
+                Stock = view.Stock,
+                User = view.User
+            };
         }
 
         // GET: Products/Edit/5

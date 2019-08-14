@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop.Web.Data.Contract;
+using System.Linq;
 
 namespace Shop.Web.Controllers.API
 {
@@ -16,7 +17,7 @@ namespace Shop.Web.Controllers.API
         [HttpGet]
         public IActionResult GetProducts()
         {
-            return Ok(this.productRepository.Getall());
+            return Ok(this.productRepository.GetAllWithUsers().OrderBy(p => p.Name));
         }
     }
 }

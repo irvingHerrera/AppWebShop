@@ -32,5 +32,20 @@ namespace Shop.Web.Data.Entities
         public double Stock { get; set; }
 
         public User User { get; set; }
+
+        public string ImgaFullPath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.ImageUrl))
+                {
+                    return null;
+                }
+                else
+                {
+                    return $"http://showirving.azurewebsites.net{this.ImageUrl.Substring(1)}";
+                }
+            }
+        }
     }
 }

@@ -33,7 +33,7 @@ namespace Shop.Web.Data.Entities
 
         public User User { get; set; }
 
-        public string ImgaFullPath
+        public string ImgeFullPath
         {
             get
             {

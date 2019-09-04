@@ -32,9 +32,8 @@ namespace Shop.Common.Models
         [JsonProperty("user")]
         public User User { get; set; }
 
-        [JsonProperty("imageFullPath")]
+        [JsonProperty("imgeFullPath")]
         public string ImageFullPath { get; set; }
-
         public byte[] ImageArray { get; set; }
 
 

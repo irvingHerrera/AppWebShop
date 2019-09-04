@@ -32,12 +32,12 @@ namespace Shop.Common.Services
                     };
                 }
 
-                var lst = JsonConvert.DeserializeObject < List<T>>(result);
+                var lst = JsonConvert.DeserializeObject <List<T>>(result);
 
                 return new Response
                 {
                     IsSuccess = true,
-                    Message = result
+                    Result = lst
                 };
 
             }

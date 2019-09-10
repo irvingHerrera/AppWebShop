@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Shop.Web.Data;
 using Shop.Web.Data.Contract;
 using Shop.Web.Data.Entities;
 using Shop.Web.Helper;
@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Web.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly IProductRepository productRepository;
@@ -69,8 +70,8 @@ namespace Shop.Web.Controllers
                     var file = $"{guid}.jpg";
 
                     path = Path.Combine(
-                        Directory.GetCurrentDirectory(), 
-                        "wwwroot\\imagenes\\Products", 
+                        Directory.GetCurrentDirectory(),
+                        "wwwroot\\imagenes\\Products",
                         file);
 
                     using (var stream = new FileStream(path, FileMode.Create))
@@ -179,7 +180,7 @@ namespace Shop.Web.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (! await productRepository.ExisAsync(product.Id))
+                    if (!await productRepository.ExisAsync(product.Id))
                     {
                         return NotFound();
                     }

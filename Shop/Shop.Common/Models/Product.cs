@@ -32,9 +32,9 @@ namespace Shop.Common.Models
         [JsonProperty("user")]
         public User User { get; set; }
 
-        [JsonProperty("imgeFullPath")]
-        public string ImageFullPath { get; set; }
-        public byte[] ImageArray { get; set; }
+        [JsonProperty("imageFullPath")]
+        public object ImageFullPath { get; set; }
+        //public byte[] ImageArray { get; set; }
 
 
         public override string ToString()

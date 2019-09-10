@@ -33,7 +33,7 @@ namespace Shop.Web.Data.Entities
 
         public User User { get; set; }
 
-        public string ImgeFullPath
+        public string ImageFullPath
         {
             get
             {
@@ -44,6 +44,7 @@ namespace Shop.Web.Data.Entities
                 else
                 {
                     return $"http://showirving.azurewebsites.net{this.ImageUrl.Substring(1)}";
+                    //return $"http://shopvicky.azurewebsites.net{this.ImageUrl.Substring(1)}";
                 }
             }
         }

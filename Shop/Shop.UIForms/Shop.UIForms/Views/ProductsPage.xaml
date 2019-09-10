@@ -24,7 +24,7 @@
                                 </Grid.ColumnDefinitions>
                                 <Image
                                     Grid.Column="0"
-                                    Source="http://showirving.azurewebsites.net/imagenes/Products/venom.jpg"
+                                    Source="{Binding ImageFullPath}"
                                     WidthRequest="100">
                                 </Image>
                                 <StackLayout

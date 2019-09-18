@@ -60,7 +60,7 @@ namespace Shop.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register( RegisterNewUserViewModel model)
+        public async Task<IActionResult> Register(RegisterNewUserViewModel model)
         {
             if (this.ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace Shop.Web.Controllers
 
                     if (result2.Succeeded)
                     {
-                        return this.RedirectToAction("Index","Home");
+                        return this.RedirectToAction("Index", "Home");
                     }
 
                     this.ModelState.AddModelError(string.Empty, "The user couldn´t be login");
@@ -99,6 +99,80 @@ namespace Shop.Web.Controllers
             }
 
             return this.View();
+        }
+
+        public async Task<IActionResult> ChangeUser()
+        {
+            var user = await this.userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+            var model = new ChangeUserViewModel();
+            if (user != null)
+            {
+                model.FirstName = user.FirsName;
+                model.LastName = user.LastName;
+            }
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeUser(ChangeUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await this.userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+                if (user != null)
+                {
+                    user.FirsName = model.FirstName;
+                    user.LastName = model.LastName;
+                    var respose = await this.userHelper.UpdateAsync(user);
+                    if (respose.Succeeded)
+                    {
+                        this.ViewBag.UserMessage = "User update!";
+                    }
+                    else
+                    {
+                        this.ModelState.AddModelError(string.Empty, respose.Errors.FirstOrDefault().Description);
+                    }
+                }
+                else
+                {
+                    this.ModelState.AddModelError(string.Empty, "User no found.");
+                }
+            }
+
+            return this.View(model);
+        }
+
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(changePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await this.userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+                if (user != null)
+                {
+                    var respose = await this.userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                    if (respose.Succeeded)
+                    {
+                        return RedirectToAction("ChangeUser");
+                    }
+                    else
+                    {
+                        this.ModelState.AddModelError(string.Empty, respose.Errors.FirstOrDefault().Description);
+                    }
+                }
+                else
+                {
+                    this.ModelState.AddModelError(string.Empty, "User no found.");
+                }
+            }
+
+            return this.View(model);
         }
     }
 }

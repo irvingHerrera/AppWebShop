@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Web.Controllers
 {
-    [Authorize]
+    
     public class ProductsController : Controller
     {
         private readonly IProductRepository productRepository;
@@ -24,7 +24,6 @@ namespace Shop.Web.Controllers
             this.userHelper = userHelper;
         }
 
-        // GET: Products
         public IActionResult Index()
         {
             return View(productRepository.Getall().OrderBy(p => p.Name));
@@ -48,7 +47,7 @@ namespace Shop.Web.Controllers
             return View(product);
         }
 
-        // GET: Products/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -106,7 +105,7 @@ namespace Shop.Web.Controllers
             };
         }
 
-        // GET: Products/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -192,7 +191,7 @@ namespace Shop.Web.Controllers
             return View(view);
         }
 
-        // GET: Products/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

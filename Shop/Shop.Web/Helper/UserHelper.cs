@@ -53,5 +53,10 @@ namespace Shop.Web.Helper
         {
             return await this.userManager.ChangePasswordAsync(user, oldPassword, newPassword);
         }
+
+        public async Task<SignInResult> ValidatePasswordAsync(User user, string password)
+        {
+            return await this.signInManager.CheckPasswordSignInAsync(user, password, false);
+        }
     }
 }

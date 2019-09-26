@@ -34,14 +34,14 @@ namespace Shop.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ProductNotFound");
             }
 
             var product = await productRepository.GetByIdAsync(id.Value);
 
             if (product == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ProductNotFound");
             }
 
             return View(product);
@@ -217,6 +217,11 @@ namespace Shop.Web.Controllers
             var product = await productRepository.GetByIdAsync(id);
             await productRepository.DeteleAsync(product);
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult ProductNotFound()
+        {
+            return this.View();
         }
     }
 }

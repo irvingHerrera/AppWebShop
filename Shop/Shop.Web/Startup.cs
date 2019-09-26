@@ -71,6 +71,11 @@ namespace Shop.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.ConfigureApplicationCookie(opt =>
+            {
+                opt.LoginPath = "/Account/NotAuthorized";
+                opt.AccessDeniedPath = "/Account/NotAuthorized";
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -89,6 +94,7 @@ namespace Shop.Web
                 app.UseHsts();
             }
 
+            app.UseStatusCodePagesWithRedirects("/error/{0}");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
